@@ -1,7 +1,7 @@
 import { model, Schema } from "mongoose";
 
 const studentSchema = new Schema({
-  name: {
+  first_name: {
     type: String,
     required: true,
   },

@@ -20,8 +20,16 @@ export const getAllCourses = async (req, res) => {
   try {
     const courses = await courseModel
       .find({ isActive: true })
-      .populate("instructor")
-      .populate("students");
+      .populate({
+        path: "instructor",
+        match: { isActive: true },
+        select: "first_name last_name email title",
+      })
+      .populate({
+        path: "students",
+        match: { isActive: true },
+        select: "first_name last_name dni",
+      });
 
     return res
       .status(200)
@@ -37,8 +45,16 @@ export const getCourseById = async (req, res) => {
     const { id } = req.params;
     const course = await courseModel
       .findOne({ _id: id, isActive: true })
-      .populate("instructor")
-      .populate("students");
+      .populate({
+        path: "instructor",
+        match: { isActive: true },
+        select: "first_name last_name email title",
+      })
+      .populate({
+        path: "students",
+        match: { isActive: true },
+        select: "first_name last_name dni",
+      });
 
     if (!course) {
       return res.status(404).json({ msg: "Curso no encontrado" });

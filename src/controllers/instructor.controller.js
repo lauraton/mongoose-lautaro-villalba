@@ -1,5 +1,6 @@
 import { matchedData } from "express-validator";
 import { instructorModel } from "../models/instructor.model.js";
+import { courseModel } from "../models/course.model.js";
 
 export const createInstructor = async (req, res) => {
   try {
@@ -18,7 +19,13 @@ export const createInstructor = async (req, res) => {
 
 export const getAllInstructors = async (req, res) => {
   try {
-    const instructors = await instructorModel.find({ isActive: true });
+    const instructors = await instructorModel
+      .find({ isActive: true })
+      .populate({
+        path: "courses",
+        match: { isActive: true },
+        select: "name description hours year",
+      });
 
     return res.status(200).json({
       msg: "Instructors encontrados correctamente",
@@ -33,10 +40,13 @@ export const getAllInstructors = async (req, res) => {
 export const getInstructorById = async (req, res) => {
   try {
     const { id } = req.params;
-    const instructor = await instructorModel.findOne({
-      _id: id,
-      isActive: true,
-    });
+    const instructor = await instructorModel
+      .findOne({ _id: id, isActive: true })
+      .populate({
+        path: "courses",
+        match: { isActive: true },
+        select: "name description hours year",
+      });
 
     if (!instructor) {
       return res.status(404).json({ msg: "Instructor no encontrado" });
@@ -84,6 +94,10 @@ export const deleteInstructor = async (req, res) => {
     if (result.matchedCount === 0) {
       return res.status(404).json({ msg: "Instructor no encontrado" });
     }
+
+    // Cascada: desactivo también los cursos del instructor
+    await courseModel.updateMany({ instructor: id }, { isActive: false });
+
     return res.status(200).json({ msg: "Instructor borrado exitosamente" });
   } catch (error) {
     console.log(error);

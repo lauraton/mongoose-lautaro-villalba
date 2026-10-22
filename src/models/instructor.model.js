@@ -26,7 +26,15 @@ const instructorSchema = new Schema(
   },
   {
     timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   },
 );
+
+instructorSchema.virtual("courses", {
+  ref: "Course",
+  localField: "_id",
+  foreignField: "instructor",
+});
 
 export const instructorModel = model("Instructor", instructorSchema);

@@ -7,6 +7,7 @@ import {
   updateInstructor,
 } from "../controllers/instructor.controller.js";
 import {
+  createInstructorValidation,
   instructorIdValidation,
   updateInstructorValidation,
 } from "../middlewares/validations/instructor.validation.js";
@@ -14,19 +15,24 @@ import { validator } from "../middlewares/validator.middleware.js";
 
 export const instructorRouter = Router();
 
-instructorRouter.put("/instructor", createInstructor);
+instructorRouter.post(
+  "/instructors",
+  createInstructorValidation,
+  validator,
+  createInstructor,
+);
 
-instructorRouter.get("/instructor", getAllInstructors);
+instructorRouter.get("/instructors", getAllInstructors);
 
 instructorRouter.get(
-  "/instructor/:id",
+  "/instructors/:id",
   instructorIdValidation,
   validator,
   getInstructorById,
 );
 
 instructorRouter.put(
-  "/instructor/:id",
+  "/instructors/:id",
   instructorIdValidation,
   updateInstructorValidation,
   validator,
@@ -34,7 +40,7 @@ instructorRouter.put(
 );
 
 instructorRouter.delete(
-  "/instructor/:id",
+  "/instructors/:id",
   instructorIdValidation,
   validator,
   deleteInstructor,

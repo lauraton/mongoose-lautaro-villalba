@@ -16,23 +16,23 @@ import { validator } from "../middlewares/validator.middleware.js";
 export const studentProfileRouter = Router();
 
 studentProfileRouter.post(
-  "/studentProfile",
+  "/student-profiles",
   createStudentProfileValidation,
   validator,
   createStudentProfile,
 );
 
-studentProfileRouter.get("/studentProfile", getAllStudentProfiles);
+studentProfileRouter.get("/student-profiles", getAllStudentProfiles);
 
 studentProfileRouter.get(
-  "/studentProfile/:id",
+  "/student-profiles/:id",
   studentProfileIdValidation,
   validator,
   getStudentProfileById,
 );
 
 studentProfileRouter.put(
-  "/studentProfile/:id",
+  "/student-profiles/:id",
   studentProfileIdValidation,
   updateStudentProfileValidation,
   validator,
@@ -40,7 +40,7 @@ studentProfileRouter.put(
 );
 
 studentProfileRouter.delete(
-  "/studentProfile/:id",
+  "/student-profiles/:id",
   studentProfileIdValidation,
   validator,
   deleteStudentProfile,

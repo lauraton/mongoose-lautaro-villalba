@@ -1,27 +1,28 @@
 import { Router } from "express";
 import {
   courseIdValidation,
-  getCourseById,
   createCourseValidation,
   updateCourseValidation,
 } from "../middlewares/validations/course.validation.js";
 import {
+  createCourse,
   deleteCourse,
   getAllCourses,
+  getCourseById,
   updateCourse,
 } from "../controllers/course.controller.js";
 import { validator } from "../middlewares/validator.middleware.js";
 
 export const courseRouter = Router();
 
-courseRouter.post("/course", createCourseValidation);
-courseRouter.get("/course", getAllCourses);
-courseRouter.get("/course/:id", courseIdValidation, validator, getCourseById);
+courseRouter.post("/courses", createCourseValidation, validator, createCourse);
+courseRouter.get("/courses", getAllCourses);
+courseRouter.get("/courses/:id", courseIdValidation, validator, getCourseById);
 courseRouter.put(
-  "/course/:id",
+  "/courses/:id",
   courseIdValidation,
   updateCourseValidation,
   validator,
   updateCourse,
 );
-courseRouter.delete("/course/:id", courseIdValidation, validator, deleteCourse);
+courseRouter.delete("/courses/:id", courseIdValidation, validator, deleteCourse);

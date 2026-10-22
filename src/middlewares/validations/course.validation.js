@@ -1,5 +1,7 @@
 import { body, param } from "express-validator";
 import { instructorModel } from "../../models/instructor.model.js";
+import { studentModel } from "../../models/student.model.js";
+import { courseModel } from "../../models/course.model.js";
 
 export const createCourseValidation = [
   body("name")
@@ -94,4 +96,48 @@ export const updateCourseValidation = [
 
 export const courseIdValidation = [
   param("id").isMongoId().withMessage("El id no es un ObjectId válido"),
+];
+
+export const addStudentToCourseValidation = [
+  param("id")
+    .isMongoId()
+    .withMessage("El id no es un ObjectId válido")
+    .bail()
+    .custom(async (courseId) => {
+      const course = await courseModel.findOne({
+        _id: courseId,
+        isActive: true,
+      });
+      if (!course) {
+        throw new Error("El curso no existe");
+      }
+      return true;
+    }),
+  body("student")
+    .notEmpty()
+    .withMessage("student no puede quedar vacío")
+    .bail()
+    .isMongoId()
+    .withMessage("student debe ser un id válido de mongo")
+    .bail()
+    .custom(async (studentId) => {
+      const student = await studentModel.findOne({
+        _id: studentId,
+        isActive: true,
+      });
+      if (!student) {
+        throw new Error("El student no existe");
+      }
+      return true;
+    })
+    .custom(async (studentId, { req }) => {
+      const enrolled = await courseModel.findOne({
+        _id: req.params.id,
+        students: studentId,
+      });
+      if (enrolled) {
+        throw new Error("El student ya está inscripto en este curso");
+      }
+      return true;
+    }),
 ];

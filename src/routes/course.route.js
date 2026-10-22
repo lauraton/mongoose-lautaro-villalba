@@ -1,10 +1,12 @@
 import { Router } from "express";
 import {
+  addStudentToCourseValidation,
   courseIdValidation,
   createCourseValidation,
   updateCourseValidation,
 } from "../middlewares/validations/course.validation.js";
 import {
+  addStudentToCourse,
   createCourse,
   deleteCourse,
   getAllCourses,
@@ -26,3 +28,9 @@ courseRouter.put(
   updateCourse,
 );
 courseRouter.delete("/courses/:id", courseIdValidation, validator, deleteCourse);
+courseRouter.post(
+  "/courses/:id/students",
+  addStudentToCourseValidation,
+  validator,
+  addStudentToCourse,
+);

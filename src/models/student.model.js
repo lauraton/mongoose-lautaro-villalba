@@ -48,4 +48,10 @@ studentSchema.virtual("profile", {
   justOne: true,
 });
 
+studentSchema.virtual("courses", {
+  ref: "Course",
+  localField: "_id",
+  foreignField: "students",
+});
+
 export const studentModel = model("Student", studentSchema);

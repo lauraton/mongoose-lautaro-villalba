@@ -21,7 +21,12 @@ export const getAllStudents = async (req, res) => {
   try {
     const getAll = await studentModel
       .find({ isActive: true })
-      .populate({ path: "profile", match: { isActive: true } });
+      .populate({ path: "profile", match: { isActive: true } })
+      .populate({
+        path: "courses",
+        match: { isActive: true },
+        select: "name description hours year",
+      });
     return res
       .status(200)
       .json({ msg: "Students encontrados correctamente", data: getAll });
@@ -39,6 +44,11 @@ export const getStudentById = async (req, res) => {
       .populate({
         path: "profile",
         match: { isActive: true },
+      })
+      .populate({
+        path: "courses",
+        match: { isActive: true },
+        select: "name description hours year",
       });
     if (!getById) {
       return res.status(404).json({ msg: "Student no encontrado" });

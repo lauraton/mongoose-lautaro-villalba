@@ -73,7 +73,9 @@ export const updateInstructorValidation = [
     .notEmpty()
     .withMessage("title no puede estar vacío")
     .isString()
-    .withMessage("title debe ser un string"),
+    .withMessage("title debe ser un string")
+    .isLength({ min: 6, max: 167 })
+    .withMessage("title debe tener al menos 6 a 167 caracteres"),
 ];
 
 export const instructorIdValidation = [

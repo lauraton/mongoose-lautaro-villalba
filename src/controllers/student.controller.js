@@ -36,7 +36,10 @@ export const getStudentById = async (req, res) => {
     const { id } = req.params;
     const getById = await studentModel
       .findOne({ _id: id, isActive: true })
-      .populate("profile");
+      .populate({
+        path: "profile",
+        match: { isActive: true },
+      });
     if (!getById) {
       return res.status(404).json({ msg: "Student no encontrado" });
     }

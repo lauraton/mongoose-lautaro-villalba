@@ -27,6 +27,10 @@ const studentSchema = new Schema({
       required: true,
     },
   },
+  isActive: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 export const studentModel = model("student", studentSchema);

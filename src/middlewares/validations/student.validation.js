@@ -31,7 +31,7 @@ export const createStudentValidation = [
       return true;
     }),
   body("address")
-    .exists()
+    .notEmpty()
     .withMessage("address es obligatorio")
     .isObject()
     .withMessage("address debe ser un objeto"),
@@ -77,11 +77,12 @@ export const updateStudentValidation = [
     .withMessage("last_name debe tener de 3 a 50 caracteres"),
   body("address")
     .optional()
-    .exists()
+    .notEmpty()
     .withMessage("address es obligatorio")
     .isObject()
     .withMessage("address debe ser un objeto"),
   body("address.city")
+    .if(body("address").exists())
     .notEmpty()
     .withMessage("city no puede estar vacío")
     .isString()
@@ -89,6 +90,7 @@ export const updateStudentValidation = [
     .isLength({ min: 2, max: 50 })
     .withMessage("city debe tener de 2 a 50 caracteres"),
   body("address.country")
+    .if(body("address").exists())
     .notEmpty()
     .withMessage("country no puede estar vacío")
     .isString()
@@ -96,6 +98,7 @@ export const updateStudentValidation = [
     .isLength({ min: 2, max: 50 })
     .withMessage("country debe tener de 2 a 50 caracteres"),
   body("address.street")
+    .if(body("address").exists())
     .notEmpty()
     .withMessage("street no puede estar vacío")
     .isString()

@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 export const startDB = async () => {
   try {
-    await mongoose.connect("mongodb://127.0.0.1:27017/db-mongoose-laurato");
+    await mongoose.connect(process.env.MONGO_URI);
     console.log("Base de datos conectada.");
   } catch (error) {
     console.log(error);

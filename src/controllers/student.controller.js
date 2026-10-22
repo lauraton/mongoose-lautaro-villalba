@@ -21,7 +21,7 @@ export const getAllStudents = async (req, res) => {
   try {
     const getAll = await studentModel
       .find({ isActive: true })
-      .populate("profile");
+      .populate({ path: "profile", match: { isActive: true } });
     return res
       .status(200)
       .json({ msg: "Students encontrados correctamente", data: getAll });

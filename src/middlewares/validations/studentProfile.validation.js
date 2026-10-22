@@ -68,7 +68,8 @@ export const createStudentProfileValidation = [
     .isDate()
     .withMessage("birth_date debe ser una fecha válida (YYYY-MM-DD)"),
   body("enrollment_year")
-    .notEmpty("enrollment_year no puede estar vacío")
+    .notEmpty()
+    .withMessage("enrollment_year no puede estar vacío")
     .isInt({ min: 1990, max: new Date().getFullYear() })
     .withMessage("enrollment_year debe ser un año válido"),
 ];

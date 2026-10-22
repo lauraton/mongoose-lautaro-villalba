@@ -36,7 +36,16 @@ const studentSchema = new Schema(
   },
   {
     timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   },
 );
+
+studentSchema.virtual("profile", {
+  ref: "StudentProfile",
+  localField: "_id",
+  foreignField: "student",
+  justOne: true,
+});
 
 export const studentModel = model("Student", studentSchema);

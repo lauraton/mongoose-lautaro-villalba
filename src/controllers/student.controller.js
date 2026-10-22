@@ -1,5 +1,6 @@
 import { matchedData } from "express-validator";
 import { studentModel } from "../models/student.model.js";
+import { studentProfileModel } from "../models/studentProfile.model.js";
 
 export const createStudent = async (req, res) => {
   try {
@@ -18,7 +19,9 @@ export const createStudent = async (req, res) => {
 
 export const getAllStudents = async (req, res) => {
   try {
-    const getAll = await studentModel.find({ isActive: true });
+    const getAll = await studentModel
+      .find({ isActive: true })
+      .populate("profile");
     return res
       .status(200)
       .json({ msg: "Students encontrados correctamente", data: getAll });
@@ -31,7 +34,9 @@ export const getAllStudents = async (req, res) => {
 export const getStudentById = async (req, res) => {
   try {
     const { id } = req.params;
-    const getById = await studentModel.findOne({ _id: id, isActive: true });
+    const getById = await studentModel
+      .findOne({ _id: id, isActive: true })
+      .populate("profile");
     if (!getById) {
       return res.status(404).json({ msg: "Student no encontrado" });
     }
@@ -84,6 +89,8 @@ export const deleteStudent = async (req, res) => {
     if (deletedStudent.matchedCount === 0) {
       return res.status(404).json({ msg: "Student no encontrado" });
     }
+
+    await studentProfileModel.updateOne({ student: id }, { isActive: false });
     return res.status(200).json({ msg: "Student borrado exitosamente" });
   } catch (error) {
     console.log(error);

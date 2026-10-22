@@ -1,6 +1,7 @@
 import { matchedData } from "express-validator";
 import { studentModel } from "../models/student.model.js";
 import { studentProfileModel } from "../models/studentProfile.model.js";
+import { courseModel } from "../models/course.model.js";
 
 export const createStudent = async (req, res) => {
   try {
@@ -104,6 +105,10 @@ export const deleteStudent = async (req, res) => {
     }
 
     await studentProfileModel.updateOne({ student: id }, { isActive: false });
+
+    // Cascada N:M: lo saco de todos los cursos donde estaba inscripto
+    await courseModel.updateMany({ students: id }, { $pull: { students: id } });
+
     return res.status(200).json({ msg: "Student borrado exitosamente" });
   } catch (error) {
     console.log(error);

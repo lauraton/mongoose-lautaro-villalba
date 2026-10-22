@@ -40,7 +40,8 @@ export const createStudentProfileValidation = [
     }),
 
   body("phone")
-    .optional()
+    .notEmpty()
+    .withMessage("phone no puede estar vacío")
     .isString()
     .withMessage("phone debe ser texto")
     .isLength({ min: 8, max: 15 })
@@ -48,7 +49,6 @@ export const createStudentProfileValidation = [
     .custom(async (phone, { req }) => {
       const profile = await studentProfileModel.findOne({
         phone,
-        _id: { $ne: req.params.id },
       });
       if (profile) {
         throw new Error("Ya existe un perfil con ese phone");
@@ -63,11 +63,12 @@ export const createStudentProfileValidation = [
     .withMessage("bio debe tener hasta 300 caracteres"),
 
   body("birth_date")
-    .optional()
+    .notEmpty()
+    .withMessage("birth_date no puede estar vacío")
     .isDate()
     .withMessage("birth_date debe ser una fecha válida (YYYY-MM-DD)"),
   body("enrollment_year")
-    .optional()
+    .notEmpty("enrollment_year no puede estar vacío")
     .isInt({ min: 1990, max: new Date().getFullYear() })
     .withMessage("enrollment_year debe ser un año válido"),
 ];
@@ -90,6 +91,8 @@ export const updateStudentProfileValidation = [
 
   body("phone")
     .optional()
+    .notEmpty()
+    .withMessage("phone no puede estar vacío")
     .isString()
     .withMessage("phone debe ser texto")
     .isLength({ min: 8, max: 15 })
@@ -114,7 +117,7 @@ export const updateStudentProfileValidation = [
 
   body("birth_date")
     .optional()
-    .isISO8601()
+    .isDate()
     .withMessage("birth_date debe ser una fecha válida (YYYY-MM-DD)"),
 
   body("enrollment_year")
